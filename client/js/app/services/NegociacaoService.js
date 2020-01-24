@@ -42,9 +42,7 @@ class NegociacaoService {
 
             xhr.send();
 
-        });
-
-        
+        });    
     }
 
     obterNegociacoesDaSemanaRetrasada() {
