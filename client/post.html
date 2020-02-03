@@ -1,4 +1,5 @@
 <!-- aluraframe/client/post.html -->
+<!-- aluraframe/client/post.html -->
 <html>
 <head>
     <meta charset="UTF-8">
@@ -28,43 +29,36 @@
         <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
     </form>
 
-    <script src="js/app/helpers/DateHelper.js"></script>
-    <script src="js/app/models/Negociacao.js"></script>
+    <script src="js/app/services/HttpService.js"></script>
     <script>
-
         function sendPost(event) {
 
             event.preventDefault();
+
             console.log("Enviando post");
 
-            let inputData = document.querySelector('#data');
-            let inputQuantidade = document.querySelector('#quantidade');
-            let inputValor = document.querySelector('#valor');
+            let $ = document.querySelector.bind(document);
+            inputData = $('#data');
+            inputQuantidade = $('#quantidade');
+            inputValor = $('#valor');
 
-            let negociacao = new Negociacao(DateHelper.textoParaData(inputData.value), inputQuantidade.value, inputValor.value);
-
-            let xhr = new XMLHttpRequest(); 
-            xhr.open('POST', '/negociacoes', );
-            xhr.setRequestHeader('Content-type', "application/json");
-            
-            xhr.onreadystatechange = () => {
-                if(xhr.readyState == 4){
-                    if(xhr.status == 200 ){
-
-                        console.log('sucesso')
-                    } else {
-                        console.log(xhr.responseText);
-                    }
-                }
+            let negociacao = {
+                data: inputData.value,
+                quantidade: inputQuantidade.value,
+                valor: inputValor.value
             };
 
-            console.log(JSON.stringify(negociacao));
-            xhr.send(`{
-                "data": "${negociacao.data}",
-                "quantidade": ${negociacao.quantidade},
-                "valor": ${negociacao.valor}
-            }`);
-        }
+            new HttpService()
+                .post('/negociacoes', negociacao)
+                .then(() => {
+                    inputData.value = '';
+                    inputQuantidade.value = 1;
+                    inputValor.value = 0.0;
+                    inputData.focus();
+                    alert('Negociação enviada com sucesso!');
+                })
+                .catch( erro => alert(`Não foi possível enviar a negociação: ${erro}`));
+    }
     </script>
 </body>
 </html>
