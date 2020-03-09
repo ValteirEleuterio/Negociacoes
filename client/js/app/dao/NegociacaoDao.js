@@ -25,8 +25,8 @@ class NegociacaoDao {
     listaTodos(){
         return new Promise((resolve, reject) => {
             let cursor = this._connection
-            .transaction(['negociacoes'], 'readwrite')
-            .objectStore('negociacoes')
+            .transaction([this._store], 'readwrite')
+            .objectStore(this._store)
             .openCursor();
 
             let negociacoes = [];
@@ -50,5 +50,23 @@ class NegociacaoDao {
                 reject('Não foi possível listar as negociações')
             }
         })
+    }
+
+    apagaTodos() {
+
+        return new Promise((resolve, reject) => {
+    
+            let request = this._connection
+                .transaction([this._store], 'readwrite')
+                .objectStore(this._store)
+                .clear();
+    
+            request.onsuccess = e => resolve('Negociações removidas com sucesso');
+    
+            request.onerror = e => {
+              console.log(e.target.error);
+              reject('Não foi possível remover as negociações');
+            }
+          });
     }
 }
