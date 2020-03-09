@@ -21,6 +21,17 @@ class NegociacaoController{
             new MensagemView($('#mensagemView')),
             'texto'
         );
+
+
+        this._buscaNegociacoesDoBanco();
+        
+    }
+
+    async _buscaNegociacoesDoBanco() {
+        let connection = await ConnectionFactory.getConnection();
+        let dao = new NegociacaoDao(connection);
+        let negociacoes = await dao.listaTodos();
+        negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
     }
 
     async adiciona(event){
