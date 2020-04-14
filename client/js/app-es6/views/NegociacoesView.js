@@ -1,7 +1,9 @@
-class NegociacoesView extends View {
+import { View } from "./View";
+import { DateHelper } from "../helpers/DateHelper";
 
-    template(model){
-        return `
+export class NegociacoesView extends View {
+  template(model) {
+    return `
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
@@ -13,7 +15,9 @@ class NegociacoesView extends View {
             </thead>
             
             <tbody>
-                ${model.negociacoes.map(n => `
+                ${model.negociacoes
+                  .map(
+                    (n) => `
 
                     <tr>
                         <td>${DateHelper.dataParaTexto(n.data)}</td>
@@ -22,7 +26,9 @@ class NegociacoesView extends View {
                         <td>${n.volume}</td>                        
                     </tr>
 
-                `).join('')}
+                `
+                  )
+                  .join("")}
             </tbody>
             
             <tfoot>
@@ -33,5 +39,5 @@ class NegociacoesView extends View {
             </tfoot>
         </table>
         `;
-    }
+  }
 }
